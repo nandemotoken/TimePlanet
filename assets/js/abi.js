@@ -332,7 +332,7 @@ abi = [
 				"type": "uint256"
 			}
 		],
-		"name": "setjisa",
+		"name": "settimezone",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"

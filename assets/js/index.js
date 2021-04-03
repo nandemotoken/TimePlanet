@@ -1,4 +1,8 @@
 
+let ContractAddress = "0x70232DC3bE8704A1Be7d39FfEA629caA1ee8e763";
+let networklist = [ "0x4" , "0x1"  ];
+let networksetting = 0;
+
 window.onload = async function(){
     ethereum.on('chainChanged', (_chainId) => window.location.reload());
     opensea = document.getElementById("opensea");
@@ -9,81 +13,42 @@ window.onload = async function(){
     opensea.addEventListener("mouseleave", function( event ) {
     opensea.style.opacity=0.3; 
     }, false);    
+};
+
+
+function getTimezoneSelected(){
+    return parseInt((document.getElementById("timezone").options[document.getElementById("timezone").selectedIndex]).value) + 24;
 }
 
-
-//---------------under deployment----------
-//--------------general settings--------------
-
-//matic testnet
-const ContractAddress = "0x129C80Af1B8Ef9E359f2Cee876760498D29A6457";
-
-//mainnet
-//const ContractAddress = "";
-
-//matic matic testnet(0) or matic network(1)
-const network = 0;
-
-//---------------------------------------------
-
-
-//testnet or mainnet 
-//rpclist = [ "" , "" ];
-explorerlist = [ "https://explorer-mumbai.maticvigil.com/tokens/" , "https://explorer-mainnet.maticvigil.com/tokens/" ];
-mintnandemotokenapilist = [ "https://mint.nandemotoken.com/api/v1/testnet/" , "https://mint.nandemotoken.com/api/v1/" ];
-opensealist = [ "https://testnets.opensea.io/account/" , "https://opensea.io/account/"];
-
-
-let replica_contract;
-
-
-function walletmodal(){
-    $('#wallet-popup').modal('show');
-}
-
-
-async function loadmm_gasfree(){
-    $('#wallet-popup').modal('hide');
+async function sendtransaction(){
     if (typeof web3 == 'undefined'){
-        ans = window.confirm("metamaskをインストールしてください\nmetamaskのインストール方法を確認しますか？\n\n参考：https://pprct.net/metamask_howtouse_01/");
-        if (ans){
-            window.open("https://pprct.net/metamask_howtouse_01/");
+        ans = window.confirm("please install metamask");
+    } else {
+        web3mm = await ethereum.enable();
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const add = await signer.getAddress();
+        console.log(add);
+        const chainId = await ethereum.request({ method: 'eth_chainId' });
+        console.log(chainId);
+        if (chainId == networklist[networksetting] ){
+            console.log("network setting ok");
+        } else {
+            ans = window.confirm("Please change network to Ethereum mainnet");
+            return;
         }
-        return;
+        const planet_contract = await new ethers.Contract( ContractAddress , abi , signer );
+        
+        nftowner = await planet_contract.ownerOf(1);
+        //console.log( nftowner );
+        //console.log( add );
+        
+        if ( nftowner !== add ) {
+            window.alert("Only owner of nft can set timezone.")
+            return;
+        }
+        
+        settime = await planet_contract.settimezone(getTimezoneSelected());
     }
-    
-    ans = window.confirm("OKを押すと『NFTチケット』がMetaMaskに送信されます")
-    if ( !ans ){
-        return;
-    }
-    
-    
-    await window.ethereum.enable();
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const add = await signer.getAddress();
-
-    ans2 = await signer.signMessage( "NFTチケットを受け取ります" );
-    if ( ans2[1] != "x" ){
-        return;
-    }
-    
-    
-    
-    let result = await $.getJSON( mintnandemotokenapilist[network] + ContractAddress + "/"+ add + "/" )
-    console.log(result);
-    $('#myinfo').modal('show')
-    
 }
 
-function explorer(){
-    //window.alert("matic")
-    ans = window.confirm("ブロックチェーンエクスプローラーを開く\n\n" + explorerlist[network] + ContractAddress + "/inventory\n\nNFTの発行状況を確認しますか？(通常は1分以内に発行されます)");
-        if(ans){ window.open( explorerlist[network] +ContractAddress + "/inventory"); }
-}
-
-function opensea(){
-    //window.alert("opensea")
-    ans = window.confirm("OpenSeaでNFTレプリカを確認する\n\n"+ opensealist[network] + "\n\nOpenSeaを開き、MetaMaskを接続しますか？\n(反映には数分時間がかかります。NFTの画像は処理が終わると表示されます)");
-        if(ans){ window.open( opensealist[network] ); }
-}
