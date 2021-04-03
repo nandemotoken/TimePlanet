@@ -1,7 +1,7 @@
 
-let ContractAddress = "0x586a2c5303a7d594cd15009bfd06b4d261c074ec";
+let ContractAddress = "0xca0b36afbd79328e2480b45064819a7c18d21ab0";
 let networklist = [ "0x4" , "0x1"  ];
-let networksetting = 0;
+let networksetting = 1;
 
 window.onload = async function(){
     ethereum.on('chainChanged', (_chainId) => window.location.reload());
