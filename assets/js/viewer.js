@@ -1,5 +1,7 @@
 timeplanetaddress = "0xca0b36afbd79328e2480b45064819a7c18d21ab0";
 
+let timeplanetjson;
+
 async function viewer(){
     
     setTimeout( "location.reload()" , 3600 * 1000 );
@@ -17,7 +19,7 @@ async function viewer(){
     //window.alert(timeplanetmp4);
     //const timeplanetjson = await $.getJSON(timeplanetjsonuri);
     //window.alert(timeplanetjson)
-    const timeplanetjson = await fetch( timeplanetjsonuri , { mode: 'cors' } )
+     timeplanetjson = await fetch( timeplanetjsonuri , { mode: 'cors' } )
     
     //console.log(timeplanetjson);
     console.log(timeplanetjson.animation_url);
