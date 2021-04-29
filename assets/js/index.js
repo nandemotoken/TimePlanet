@@ -12,7 +12,10 @@ window.onload = async function(){
     }, false);    
     opensea.addEventListener("mouseleave", function( event ) {
     opensea.style.opacity=0.3; 
-    }, false);    
+    }, false);
+    if (window.location.href.indexOf("viewer") > -1) {
+      viewer();
+    }
 };
 
 
