@@ -24,6 +24,8 @@ async function viewer(){
     //console.log(timeplanetjson);
     console.log(timeplanetjson.animation_url);
     
+    window.alert("1")
+    
     const timeplanetviewer = document.getElementById("timeplanetviewer");
 
     const ipfsvideocid = timeplanetjson.animation_url.split("\/")[3];
