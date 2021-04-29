@@ -19,16 +19,21 @@ async function viewer(){
     //window.alert(timeplanetmp4);
     //const timeplanetjson = await $.getJSON(timeplanetjsonuri);
     //window.alert(timeplanetjson)
-     timeplanetjson = await fetch( timeplanetjsonuri , { mode: 'cors' } )
+    //window.alert("2")
+    
+    timeplanetjson = await fetch( timeplanetjsonuri , { mode: 'cors' } )
+    
+    const jsonbody = await timeplanetjson.json();
+    
+    
     
     //console.log(timeplanetjson);
-    console.log(timeplanetjson.animation_url);
+    console.log(jsonbody.animation_url);
     
-    window.alert("1")
     
     const timeplanetviewer = document.getElementById("timeplanetviewer");
 
-    const ipfsvideocid = timeplanetjson.animation_url.split("\/")[3];
+    const ipfsvideocid = jsonbody.animation_url.split("\/")[3];
 
 //  timeplanetviewer.src = ipfsgateway + ipfsvideocid +"?sanitize=true";
     timeplanetviewer.src = ipfsgateway + ipfsvideocid ;
