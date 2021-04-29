@@ -15,8 +15,9 @@ async function viewer(){
     //window.alert(ipfscid);
     const timeplanetjsonuri = ipfsgateway + ipfscid;
     //window.alert(timeplanetmp4);
-    const timeplanetjson = await $.getJSON(timeplanetjsonuri);
+    //const timeplanetjson = await $.getJSON(timeplanetjsonuri);
     //window.alert(timeplanetjson)
+    const timeplanetjson = await fetch( timeplanetjsonuri , { mode: 'cors' } )
     
     //console.log(timeplanetjson);
     console.log(timeplanetjson.animation_url);
